@@ -1,11 +1,13 @@
-import News from "./News";
+
+import Notice from "./Notice";
 import { useContext, useState, useEffect } from "react";
-import { NewsContext } from "../context/NewsContext";
+
+import { NoticeContext } from "../context/NoticeContext";
 import { Button, Modal, Alert } from "react-bootstrap";
 import AddNews from "./AddNews";
 
-const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
-  const {admin,setAdmin,news} = useContext(NewsContext)
+const NoticeList = ({newsOrNotice,setNewsOrNotice}) => {
+  const {admin,setAdmin,notice} = useContext(NoticeContext)
 
   const [show, setShow] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -19,8 +21,8 @@ const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
       setShowAlert(false);
     }, 2000);
   };
- 
-  
+
+   
 
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
     return () => {
       handleAlertShow();
     };
-  }, [news]);
+  }, [notice]);
 
   return (
     <>
@@ -43,7 +45,6 @@ const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
               <span>{admin ? 'Admin':'User'}</span>
             </Button>
           </div>
-
           <div>
             <Button
               onClick={()=>setNewsOrNotice(prev=>!prev)}
@@ -53,6 +54,7 @@ const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
               <span>{newsOrNotice ? 'News':'Notice'}</span>
             </Button>
           </div>
+          
          {admin ? <div>
             <Button
               onClick={handleShow}
@@ -84,11 +86,11 @@ const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
           </tr>
         </thead>
         <tbody>
-          {news
+          {notice
             .sort((a, b) => a.topic.localeCompare(b.topic))
-            .map((news) => (admin||news.status?
-              <tr key={news.id}>
-                <News news={news}></News>
+            .map((notice) => (admin||notice.status?
+              <tr key={notice.id}>
+                <Notice notice={notice}></Notice>
               </tr>:null
             ))}
         </tbody>
@@ -111,4 +113,4 @@ const NewsList = ({newsOrNotice,setNewsOrNotice}) => {
   );
 };
 
-export default NewsList;
+export default NoticeList;
