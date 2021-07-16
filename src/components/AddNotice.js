@@ -1,23 +1,25 @@
 import { Button } from "react-bootstrap";
 import { Form, FormGroup } from "react-bootstrap";
-import { NewsContext } from "../context/NewsContext";
+import { NoticeContext } from "../context/NoticeContext";
 import { useContext, useState } from "react";
 
-const AddNews = () => {
-  const { dispatch } = useContext(NewsContext);
-  const [newNews, setNewNews] = useState({
+const AddNotice = () => {
+  const { dispatch } = useContext(NoticeContext);
+  const [ newNotice, setNewNotice] = useState({
     topic: "",
     content: "",
     lastdate: "",
-    haberLink: "",
-    status: false
+    link: "",
+    status: false,
+    newsId:""
+
   });
 
-  const { topic, content, lastdate, haberLink, status ,newsId} = newNews;
+  const { topic, content, lastdate, status , newsId} = newNotice;
 
   const onInputChange = (e) => {
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value
-    setNewNews({ ...newNews, [e.target.name]: value });
+    setNewNotice({ ...newNotice, [e.target.name]: value });
   };
   console.log(status)
   const handleSubmit = (e) => {
@@ -25,12 +27,12 @@ const AddNews = () => {
     dispatch({
       type: 'add',
       state: {
-        topic: newNews.topic,
-        content: newNews.content,
+        topic: newNotice.topic,
+        content: newNotice.content,
         date: new Date(),
-        status: newNews.status,
-        haberLink:newNews.haberLink
-     
+        status: newNotice.status,
+        newsId:newNotice.newsId
+        
       }
     });
   };
@@ -50,8 +52,7 @@ const AddNews = () => {
           required
         ></Form.Control>
         <Form.Control
-        className="mb-2"
-        as="textarea" 
+        className="mb-2" 
           type="text"
           placeholder="content *"
           name="content"
@@ -59,25 +60,25 @@ const AddNews = () => {
           onChange={(e) => onInputChange(e)}
           required
         ></Form.Control>
-         <Form.Control
+        
+        <Form.Control
         className="mb-2" 
           type="text"
-          placeholder="haberLink *"
-          name="haberLink"
-          value={haberLink}
+          placeholder="newsId *"
+          name="newsId"
+          value={newsId}
           onChange={(e) => onInputChange(e)}
           required
         ></Form.Control>
-        
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+        <Form.Group className="mb-2" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" name="status" checked={status} onChange={(e) => onInputChange(e)} label="Check me out" />
         </Form.Group>
       </FormGroup>
       <Button variant="success" type="submit" block>
-        Add New News
+        Add New Notice
       </Button>
     </Form>
   );
 };
 
-export default AddNews;
+export default AddNotice;

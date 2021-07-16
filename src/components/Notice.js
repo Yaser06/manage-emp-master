@@ -1,65 +1,81 @@
 import { useContext, useState, useEffect } from "react";
 import { NoticeContext } from "../context/NoticeContext";
 import { Button, Modal } from "react-bootstrap";
-import EditNews from "./EditNews";
+import EditNotice from "./EditNotice";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
-const News = ({ notice }) => {
+
+const Notice = ({ notice }) => {
 
   const { dispatch, admin } = useContext(NoticeContext);
 
   const [show, setShow] = useState(false);
-  
+  const [detail, setDetail] = useState(false);
+
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const deleteNew=(id,item)=>{
-     dispatch({
-       type:'delete',
-       id,
-       state:item
-     })
+  const handleDetailClose = () => setDetail(false);
+  const handleDetailShow = () => setDetail(true);
+
+
+  const deleteNotice = (id, item) => {
+    dispatch({
+      type: 'delete',
+      id,
+      state: item
+    })
   }
   useEffect(() => {
     handleClose();
+    handleDetailClose();
   }, [notice]);
 
   return (
     <>
       <td>{notice.topic}</td>
-      <td>{notice.content}</td>
+      <td className="w-10">{notice.content}</td>
       <td>{new Date(notice.date).toLocaleDateString("tr-TR")}</td>
-      <td>{notice.link}</td>
-      <td>{notice.status.toString()}</td>
+      <td>{notice.newsId}</td>
+      {admin ? <td>{notice.status.toString()}</td> : null}
       <td>
         {admin ? <>
           <button
-          className="btn text-warning btn-act"
-          data-toggle="modal" 
-          disabled={!admin}
-          onClick={handleShow}
-        >
-          <i className="material-icons" data-toggle="tooltip" title="Edit">
-            &#xE254;
+            className="btn text-warning btn-act"
+            data-toggle="modal"
+            disabled={!admin}
+            onClick={handleShow}
+          >
+            <i className="material-icons" data-toggle="tooltip" title="Edit">
+              &#xE254;
           </i>
-        </button>
+          </button>
+          <button
+            className="btn text-danger btn-act"
+            data-toggle="modal"
+            disabled={!admin}
+            onClick={() => deleteNotice(notice.id, notice)}
+          >
+            <i className="material-icons" data-toggle="tooltip" title="Delete">
+              &#xE872;
+          </i>
+          </button></> : ""}
         <button
           className="btn text-danger btn-act"
           data-toggle="modal"
-          disabled={!admin}
-          onClick={() => deleteNew(notice.id,notice)}
-        >
-          <i className="material-icons" data-toggle="tooltip" title="Delete">
-            &#xE872;
-          </i>
+
+          onClick={handleDetailShow}>
+          <VisibilityIcon></VisibilityIcon>
         </button>
-        </>:""}
+
       </td>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header" closeButton>
-          <Modal.Title>Update News</Modal.Title>
+          <Modal.Title>Update Notice</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <EditNews theNews={notice}></EditNews>
+          <EditNotice theNotice={notice}></EditNotice>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -67,8 +83,22 @@ const News = ({ notice }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={detail} onHide={handleDetailShow}>
+        <Modal.Header className="modal-header" closeButton>
+          <Modal.Title>Detail Notice</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditNotice theNotice={notice} editOrDetail={detail}></EditNotice>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDetailClose}>
+            Close Modal
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </>
   );
 };
 
-export default News;
+export default Notice;

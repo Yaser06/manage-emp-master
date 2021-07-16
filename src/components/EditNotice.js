@@ -1,39 +1,42 @@
 import { Button } from "react-bootstrap";
 import { Form, FormGroup } from "react-bootstrap";
-import { NewsContext } from "../context/NewsContext";
+import { NoticeContext } from "../context/NoticeContext";
 import { useContext, useState } from "react";
 
-const EditNews = ({ theNews ,editOrDetail}) => {
-  const { dispatch } = useContext(NewsContext);
-  console.log("sws", theNews)
-  const [topic, setTopic] = useState(theNews?.topic || "x");
-  const [content, setContent] = useState(theNews?.content || "x");
-  const [date, setDate] = useState(theNews?.date || "x");
-  const [haberLink, setHaberLink] = useState(theNews?.haberLink);
-  const [status, setStatus] = useState(theNews?.status)
+const EditNotice = ({ theNotice, editOrDetail }) => {
+  const { dispatch } = useContext(NoticeContext);
+  console.log("sws", theNotice)
+  const [topic, setTopic] = useState(theNotice?.topic || "x");
+  const [content, setContent] = useState(theNotice?.content || "x");
+  const [date, setDate] = useState(theNotice?.date || "x");
+  const [link, setlink] = useState(theNotice?.link);
+  const [status, setStatus] = useState(theNotice?.status)
+  const [newsId, setnewsId] = useState(theNotice?.newsId)
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newItem = {
-      ...theNews,
+      ...theNotice,
       topic,
       content,
       status,
       date: new Date(),
-      haberLink
+      newsId,
 
     }
     dispatch({
       type: 'update',
-      id: theNews.id,
+      id: theNotice.id,
       state: newItem
     });
   }
-  console.log("ss",status)
+  console.log("ss", status)
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup>
-        <Form.Control className="mb-2"
+        <Form.Control
+          className="mb-2"
           readOnly={editOrDetail ? true : false}
           type="text"
           placeholder="topic *"
@@ -42,7 +45,8 @@ const EditNews = ({ theNews ,editOrDetail}) => {
           onChange={(e) => setTopic(e.target.value)}
           required
         ></Form.Control>
-        <Form.Control className="mb-2"
+        <Form.Control
+          className="mb-2"
           readOnly={editOrDetail ? true : false}
           type="content"
           placeholder="content *"
@@ -51,29 +55,34 @@ const EditNews = ({ theNews ,editOrDetail}) => {
           onChange={(e) => setContent(e.target.value)}
           required
         ></Form.Control>
-       <Form.Control
-        className="mb-2" 
-        readOnly={editOrDetail ? true : false}
+
+        <Form.Control
+          className="mb-2"
+          readOnly={editOrDetail ? true : false}
+
           type="text"
-          placeholder="haberLink *"
-          name="haberLink"
-          value={haberLink}
-          onChange={(e) => setHaberLink(e.target.value)}
+          placeholder="newsId *"
+          name="newsId"
+          value={newsId}
+          onChange={(e) => setnewsId(e.target.value)}
           required
         ></Form.Control>
         <Form.Group hidden={editOrDetail ? true : false} className="mb-2" controlId="formBasicCheckbox">
           <Form.Check type="checkbox"
-            name="status" 
+
+
+            name="status"
             checked={status}
             onChange={(e) => setStatus(e.target.checked)}
             label="Check me out" />
         </Form.Group>
+
       </FormGroup>
       {!editOrDetail?<Button variant="success" type="submit" block>
-        Update News
+        Update Notice
       </Button>:null}
     </Form>
   );
 };
 
-export default EditNews;
+export default EditNotice;

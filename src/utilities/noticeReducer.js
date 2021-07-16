@@ -1,18 +1,18 @@
-import addNews from "./addNews";
+import addNotice from "./addNotice";
 import deleteNotice from "./deleteNotice";
-import updateNews from "./updateNews";
+import updateNotice from "./updateNotice";
 
-const handleAdd = addNews();
-const handleUpdate = updateNews();
+const handleAdd = addNotice();
+const handleUpdate = updateNotice();
 const handleDelete = deleteNotice();
 
-const reducer = (state, action) => {
+const noticeReducer = (state, action) => {
     switch (action.type) {
         case 'finished':
             return action.state;
         case 'add':
-            console.log('mansur     ',state);
             handleAdd(action.state)
+            console.log('kkkk',action.state);
             return [action.state, ...state];// spread operator javascript
         case 'update':
             handleUpdate(action.id, action.state)
@@ -24,6 +24,7 @@ const reducer = (state, action) => {
                 }
             })
         case 'delete':
+            console.log('delete artık');
             handleDelete(action.id, action.state)
             return state.map(item => {
                 if (item?.id === action?.id) {
@@ -36,5 +37,5 @@ const reducer = (state, action) => {
             return state;
     }
 }
-export default reducer
+export default noticeReducer
 

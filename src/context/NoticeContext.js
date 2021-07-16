@@ -1,8 +1,7 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 import useGetItems from "../customHook/useGetItems";
 import useGetNotice from "../customHook/useGetNotice";
-
-import reducer from "../utilities/reducer";
+import noticeReducer from "../utilities/noticeReducer";
 
 export const NoticeContext = createContext();
 
@@ -10,9 +9,10 @@ const NoticeContextProvider = (props) => {
   const [admin,setAdmin]= useState(true)
 
 
-  const [notice, dispatch] = useReducer(reducer, []);
+  const [notice, dispatch] = useReducer(noticeReducer, []);
   const items = useGetNotice();
   useEffect(()=>{
+    console.log('notice',items)
     dispatch({
       type:'finished',
       state:items

@@ -5,7 +5,7 @@ const useGetItems = () => {
     useEffect(() => {
         axios.get('http://localhost:8081/news')
             .then(function ({ data }) {
-                // handle success
+                console.log('news',data)
                 setState(data);
             })
             .catch(function (error) {
